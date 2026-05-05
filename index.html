@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚽ 2026世界杯极客倒计时</title>
+    <title>⚽ 2026世界杯倒计时</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --primary-color: #1e40af; /* 默认蓝 */
-            --secondary-color: #ef4444; /* 默认红 */
+            --primary-blue: #1e40af;
+            --light-blue: #3b82f6;
+            --accent-red: #ef4444;
+            --dark-bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            /* 🎨 新增：换肤变量 */
             --bg-gradient-start: #0f172a;
             --bg-gradient-end: #1e3a5f;
         }
@@ -16,62 +26,224 @@
         body {
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
+            /* 🎨 修改：使用换肤变量控制背景 */
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            transition: background 1s ease;
+            overflow-x: hidden;
+            transition: background 1s ease; /* 平滑过渡效果 */
         }
 
-        .container { text-align: center; z-index: 10; max-width: 500px; width: 100%; }
-        .world-cup-logo { font-size: 60px; margin-bottom: 10px; animation: bounce 2s ease infinite; }
-        
-        h1 { 
-            color: white; 
-            font-size: 28px; 
-            font-weight: 700; 
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            margin-bottom: 5px;
-            min-height: 67px; /* 防止文字变化时页面抖动 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* 动态背景球 */
+        .bg-ball {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+            animation: float 6s ease-in-out infinite;
         }
 
-        .subtitle { color: rgba(255,255,255,0.8); font-size: 14px; letter-spacing: 3px; text-transform: uppercase; }
-        
-        .countdown { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
-        .time-block { 
-            background: rgba(30, 41, 59, 0.8); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 16px; 
-            padding: 20px 15px; 
-            min-width: 100px; 
+        .bg-ball:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            left: -50px;
+            top: auto;
+            right: auto;
+            animation-delay: -2s;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
         }
-        .number { font-size: 48px; font-weight: 700; color: white; line-height: 1; text-shadow: 0 2px 10px rgba(59, 130, 246, 0.5); }
-        .label { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .info-card { 
-            background: rgba(255,255,255,0.05); 
-            backdrop-filter: blur(10px); 
-            border-radius: 16px; 
-            padding: 20px; 
-            margin-top: 20px; 
-            border: 1px solid rgba(255,255,255,0.1); 
-        }
-        .info-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); color: white; font-size: 14px; }
-        .info-item:last-child { border-bottom: none; }
-        .info-value { font-weight: 600; color: var(--secondary-color); }
 
-        .footer { margin-top: 25px; color: rgba(255,255,255,0.5); font-size: 12px; }
-        .pulse { display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; margin-right: 8px; animation: pulse 1.5s infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .world-cup-logo {
+            font-size: 60px;
+            margin-bottom: 10px;
+            animation: bounce 2s ease infinite;
+        }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
+
+        h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 15px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .flags {
+            display: flex;
+            gap: 5px;
+        }
+
+        .flag {
+            width: 24px;
+            height: 16px;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 倒计时卡片 */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .time-block {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 20px 15px;
+            min-width: 100px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .time-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .number {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .label {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 进度条 */
+        .progress-container {
+            margin: 30px 0;
+        }
+
+        .progress-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--light-blue), var(--accent-red));
+            border-radius: 3px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        /* 底部信息 */
+        .info-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            font-size: 14px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--light-blue);
+        }
+
+        /* 🎨 新增：今日主题卡片 */
+        #themeCard {
+            margin-top: 15px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 1.5s infinite;
+        }
+
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
@@ -88,87 +260,136 @@
     </style>
 </head>
 <body>
+    <div class="bg-ball"></div>
+    <div class="bg-ball"></div>
+
     <div class="container">
         <div class="header">
             <div class="world-cup-logo">🏆</div>
-            <h1 id="dynamicTitle">2026 FIFA World Cup™</h1>
+            <h1>FIFA World Cup 2026™</h1>
             <p class="subtitle">倒计时</p>
+            <div class="location-badge">
+                <div class="flags">
+                    <span title="USA">🇺🇸</span>
+                    <span title="Canada">🇨🇦</span>
+                    <span title="Mexico">🇲🇽</span>
+                </div>
+                United States · Canada · Mexico
+            </div>
         </div>
 
         <div class="countdown" id="countdown">
-            <div class="time-block"><div class="number" id="days">--</div><div class="label">天</div></div>
-            <div class="time-block"><div class="number" id="hours">--</div><div class="label">小时</div></div>
-            <div class="time-block"><div class="number" id="minutes">--</div><div class="label">分钟</div></div>
-            <div class="time-block"><div class="number" id="seconds">--</div><div class="label">秒</div></div>
+            <div class="time-block">
+                <div class="number" id="days">--</div>
+                <div class="label">天</div>
+            </div>
+            <div class="time-block">
+                <div class="number" id="hours">--</div>
+                <div class="label">小时</div>
+            </div>
+            <div class="time-block">
+                <div class="number" id="minutes">--</div>
+                <div class="label">分钟</div>
+            </div>
+            <div class="time-block">
+                <div class="number" id="seconds">--</div>
+                <div class="label">秒</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-label">距离开赛进度</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
         </div>
 
         <div class="info-card">
-            <div class="info-item"><span>📅 今日焦点</span><span class="info-value" id="focusTeam">加载中...</span></div>
-            <div class="info-item"><span>🎨 主题配色</span><span class="info-value" id="themeName">默认</span></div>
-            <div class="info-item"><span>⚽ 当前状态</span><span class="info-value"><span class="pulse"></span>极客模式 ON</span></div>
+            <div class="info-item">
+                <span>📅 开幕日期</span>
+                <span class="info-value">2026年6月11日</span>
+            </div>
+            <div class="info-item">
+                <span>🏟️ 决赛场地</span>
+                <span class="info-value">MetLife Stadium</span>
+            </div>
+            <div class="info-item">
+                <span>👥 参赛队伍</span>
+                <span class="info-value">48 支球队</span>
+            </div>
+            <div class="info-item">
+                <span>🎯 当前状态</span>
+                <span class="info-value"><span class="pulse"></span>等待开赛</span>
+            </div>
         </div>
 
-        <div class="footer">⚽ 代码驱动的世界杯 | 2026 美加墨</div>
+        <!-- 🎨 新增：今日主题卡片 -->
+        <div class="info-card" id="themeCard">
+            <div class="info-item">
+                <span>📅 今日焦点</span>
+                <span class="info-value" id="focusTeam">加载中...</span>
+            </div>
+            <div class="info-item">
+                <span>🎨 主题配色</span>
+                <span class="info-value" id="themeName">默认</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            ⚽ 2026 FIFA World Cup | 美加墨世界杯
+        </div>
     </div>
 
     <script>
-        // ==========================================
-        // 核心配置：在这里定义每天的皮肤
-        // 日期格式：月/日 (Month/Day)
-        // ==========================================
+        // 🎨 新增：每日自动换肤调度器
         const themeSchedule = [
-            { date: '5/6', team: '⚽ 倒计时启动', color1: '#0f172a', color2: '#1e40af', name: '深蓝科技' },
             { date: '5/7', team: '🔵 阿根廷', color1: '#1e3a8a', color2: '#60a5fa', name: '潘帕斯蓝白' },
             { date: '5/8', team: '💛 巴西', color1: '#166534', color2: '#fbbf24', name: '桑巴黄绿' },
             { date: '5/9', team: '🟡 法国', color1: '#1e3a8a', color2: '#fbbf24', name: '高卢雄鸡' },
             { date: '5/10', team: '🟢 英格兰', color1: '#064e3b', color2: '#ffffff', name: '三狮军团' },
-            { date: '5/11', team: '🔴 西班牙', color1: '#7f1d1d', color2: '#fbbf24', name: '斗牛士红黄' },
+            { date: '5/11', team: '🔴 西班牙', color1: '#7f1d1d', color2: '#fbbf24', name: '斗牛士' },
             { date: '5/12', team: '⚪ 德国', color1: '#1f2937', color2: '#000000', name: '日耳曼黑白' },
             { date: '5/13', team: '🟣 意大利', color1: '#4c1d95', color2: '#22d3ee', name: '地中海紫' },
             { date: '5/14', team: '🟠 荷兰', color1: '#7c2d12', color2: '#000000', name: '橙衣军团' },
             { date: '5/15', team: '🔵 葡萄牙', color1: '#1e3a8a', color2: '#dc2626', name: '航海红蓝' },
-            { date: '5/16', team: '⚪ 克罗地亚', color1: '#1f2937', color2: '#fbbf24', name: '格子军团' },
-            { date: '5/17', team: '🟢 墨西哥', color1: '#14532d', color2: '#dc2626', name: '草帽军团' },
-            { date: '5/18', team: '🔴 美国', color1: '#1e3a8a', color2: '#dc2626', name: '星条旗红蓝' },
-            { date: '5/19', team: '🟢 东道主', color1: '#064e3b', color2: '#fbbf24', name: '北美风情' },
-            { date: '5/20', team: '🏟️ 抽签仪式', color1: '#1e3a8a', color2: '#dc2626', name: '抽签日' },
-            // ... 你可以在这里继续添加更多日期 ...
-            // 默认兜底（如果日期没匹配上）
-            { date: 'default', team: '🌎 2026世界杯', color1: '#0f172a', color2: '#1e40af', name: '默认蓝' } 
+            { date: '5/16', team: '🟢 墨西哥', color1: '#14532d', color2: '#dc2626', name: '草帽军团' },
+            { date: '5/17', team: '🔴 美国', color1: '#1e3a8a', color2: '#dc2626', name: '星条旗' },
+            { date: '5/18', team: '🇨🇦 加拿大', color1: '#064e3b', color2: '#dc2626', name: '枫叶红' },
+            { date: 'default', team: '🌎 2026世界杯', color1: '#0f172a', color2: '#1e40af', name: '默认深蓝' } 
         ];
 
-        // ==========================================
-        // 自动换肤逻辑
-        // ==========================================
         function applyTheme() {
             const today = new Date();
-            const month = today.getMonth() + 1; // getMonth() 返回 0-11
+            const month = today.getMonth() + 1;
             const day = today.getDate();
             const todayStr = `${month}/${day}`;
 
-            let currentTheme = themeSchedule.find(t => t.date === todayStr) || themeSchedule[themeSchedule.length - 1]; // 如果找不到就用最后一个
+            // 查找今日主题，找不到则用默认
+            let currentTheme = themeSchedule.find(t => t.date === todayStr) || themeSchedule[themeSchedule.length - 1];
 
-            // 改变 CSS 变量
+            // 更新CSS变量（背景色）
             document.documentElement.style.setProperty('--bg-gradient-start', currentTheme.color1);
             document.documentElement.style.setProperty('--bg-gradient-end', currentTheme.color2);
             
-            // 改变文字
-            document.getElementById('dynamicTitle').innerText = currentTheme.team;
-            document.getElementById('focusTeam').innerText = currentTheme.team;
-            document.getElementById('themeName').innerText = currentTheme.name;
+            // 更新页面文字
+            const focusEl = document.getElementById('focusTeam');
+            const nameEl = document.getElementById('themeName');
+            if(focusEl) focusEl.innerText = currentTheme.team;
+            if(nameEl) nameEl.innerText = currentTheme.name;
         }
 
-        // ==========================================
-        // 倒计时逻辑 (保持不变)
-        // ==========================================
-        const WORLD_CUP_DATE = new Date('2026-06-11T15:00:00-04:00'); 
+        // 原有倒计时逻辑（保持不变）
+        const WORLD_CUP_DATE = new Date('2026-06-11T15:00:00-04:00');
+        const START_DATE = new Date('2023-06-11');
 
         function updateCountdown() {
             const now = new Date();
             const diff = WORLD_CUP_DATE - now;
 
             if (diff <= 0) {
-                document.getElementById('countdown').innerHTML = '<div style="color:white;font-size:32px;">🎉 世界杯开始啦！ 🎉</div>';
+                document.getElementById('countdown').innerHTML = 
+                    '<div style="color:white;font-size:32px;">🎉 世界杯开始啦！ 🎉</div>';
+                document.querySelector('.progress-fill').style.width = '100%';
                 return;
             }
 
@@ -181,12 +402,35 @@
             document.getElementById('hours').textContent = String(hours).padStart(2, '0');
             document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
             document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            // 更新进度条
+            const totalDuration = WORLD_CUP_DATE - START_DATE;
+            const elapsed = now - START_DATE;
+            const progress = Math.min((elapsed / totalDuration) * 100, 100);
+            document.getElementById('progressFill').style.width = progress + '%';
         }
 
-        // 初始化
-        applyTheme();
+        // 初始更新
+        applyTheme(); // 先应用换肤
         updateCountdown();
+        
+        // 每秒更新
         setInterval(updateCountdown, 1000);
+
+        // 原有数字变化动画
+        const numbers = document.querySelectorAll('.number');
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.target.classList.add('updated');
+                    setTimeout(() => mutation.target.classList.remove('updated'), 300);
+                }
+            });
+        });
+
+        numbers.forEach(num => {
+            observer.observe(num, { childList: true });
+        });
     </script>
 </body>
 </html>
