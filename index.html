@@ -357,7 +357,7 @@
             { date: 'default', team: '🌎 2026世界杯', color1: '#0f172a', color2: '#1e40af', name: '默认深蓝' } 
         ];
 
-        function applyTheme() {
+       function applyTheme() {
     const today = new Date();
     const month = today.getMonth() + 1;
     const day = today.getDate();
@@ -368,7 +368,7 @@
     // 更新CSS变量
     document.documentElement.style.setProperty('--bg-gradient-start', currentTheme.color1);
     document.documentElement.style.setProperty('--bg-gradient-end', currentTheme.color2);
-    
+
     // 更新页面文字
     const focusEl = document.getElementById('focusTeam');
     const nameEl = document.getElementById('themeName');
@@ -390,7 +390,7 @@
     const luminance = getLuminance(currentTheme.color1);
     // 如果背景太暗（亮度小于128），文字变白；否则变黑
     const textColor = luminance < 128 ? '#ffffff' : '#000000';
-    
+
     // 应用到所有文字
     document.body.style.color = textColor; 
     // 单独调整卡片里的文字
