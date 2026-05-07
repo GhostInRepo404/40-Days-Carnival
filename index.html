@@ -217,8 +217,7 @@
         }
 
         .info-value {
-            font-weight: 600;
-            color: var(--light-blue);
+            font-weight: 600;           
         }
 
         /* 🎨 新增：今日主题卡片 */
@@ -359,24 +358,45 @@
         ];
 
         function applyTheme() {
-            const today = new Date();
-            const month = today.getMonth() + 1;
-            const day = today.getDate();
-            const todayStr = `${month}/${day}`;
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const todayStr = `${month}/${day}`;
 
-            // 查找今日主题，找不到则用默认
-            let currentTheme = themeSchedule.find(t => t.date === todayStr) || themeSchedule[themeSchedule.length - 1];
+    let currentTheme = themeSchedule.find(t => t.date === todayStr) || themeSchedule[themeSchedule.length - 1];
 
-            // 更新CSS变量（背景色）
-            document.documentElement.style.setProperty('--bg-gradient-start', currentTheme.color1);
-            document.documentElement.style.setProperty('--bg-gradient-end', currentTheme.color2);
-            
-            // 更新页面文字
-            const focusEl = document.getElementById('focusTeam');
-            const nameEl = document.getElementById('themeName');
-            if(focusEl) focusEl.innerText = currentTheme.team;
-            if(nameEl) nameEl.innerText = currentTheme.name;
-        }
+    // 更新CSS变量
+    document.documentElement.style.setProperty('--bg-gradient-start', currentTheme.color1);
+    document.documentElement.style.setProperty('--bg-gradient-end', currentTheme.color2);
+    
+    // 更新页面文字
+    const focusEl = document.getElementById('focusTeam');
+    const nameEl = document.getElementById('themeName');
+    if(focusEl) focusEl.innerText = currentTheme.team;
+    if(nameEl) nameEl.innerText = currentTheme.name;
+
+    // ==========================================
+    // 👇 新增：智能计算背景亮度，自动反转文字颜色
+    // ==========================================
+    function getLuminance(hexColor) {
+        const rgb = parseInt(hexColor.replace('#', ''), 16);
+        const r = (rgb >> 16) & 0xff;
+        const g = (rgb >> 8) & 0xff;
+        const b = (rgb >> 0) & 0xff;
+        // 公式计算亮度
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    const luminance = getLuminance(currentTheme.color1);
+    // 如果背景太暗（亮度小于128），文字变白；否则变黑
+    const textColor = luminance < 128 ? '#ffffff' : '#000000';
+    
+    // 应用到所有文字
+    document.body.style.color = textColor; 
+    // 单独调整卡片里的文字
+    const infoItems = document.querySelectorAll('.info-item');
+    infoItems.forEach(item => item.style.color = textColor);
+}
 
         // 原有倒计时逻辑（保持不变）
         const WORLD_CUP_DATE = new Date('2026-06-11T15:00:00-04:00');
